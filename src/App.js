@@ -1,23 +1,35 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
+import { Switch, Route } from 'react-router-dom';
+import Header from './components/header/Header';
+import ProtectedRoute from './components/ProtectedRoute';
+import Home from './pages/home/Home';
+import Login from './pages/login/Login';
+import Register from './pages/register/Register';
+import UserContext from './contexts/userContext';
+import AuthKit from './data/AuthKit';
 import './App.css';
 
 function App() {
+  const [currentUser, setCurrentUser] = useState(null);
+  const authKit = new AuthKit();
+
+  useEffect(() => {
+    if (authKit.getSessionToken() !== null) {
+      setCurrentUser(authKit.getSessionToken());
+    }
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <UserContext.Provider value={{ currentUser, setCurrentUser }}>
+        <Header />
+        <Switch>
+          <ProtectedRoute path="/home" component={Home}></ProtectedRoute>
+          <ProtectedRoute exact path="/" component={Home}></ProtectedRoute>
+          <Route path="/login" component={Login}></Route>
+          <Route path="/register" component={Register}></Route>
+        </Switch>
+      </UserContext.Provider>
     </div>
   );
 }
