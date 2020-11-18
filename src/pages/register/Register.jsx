@@ -4,6 +4,7 @@ import { SignInContainer, TextLink } from '../login/login.style';
 import AuthKit from '../../data/AuthKit';
 import CustomButton from '../../components/custom-button/Custom-button';
 import Dropdown from '../../components/dropdown/Dropdown';
+import Alert from '../../components/alert/Alert';
 
 export default function Register(props) {
   const [firstName, setFirstName] = useState('');
@@ -12,13 +13,13 @@ export default function Register(props) {
   const [password, setPassword] = useState('');
   const [countries, setCountries] = useState([]);
   const [options, setOptions] = useState([]);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [alertMsg, setAlertMsg] = useState(null);
   const authKit = new AuthKit();
 
   function handleSubmit(e) {
     e.preventDefault();
     if (countries.length === 0) {
-      setErrorMsg({ msg: 'Please select country!' });
+      setAlert({ msg: 'Please select country!' }, 'danger');
       return;
     }
     const country = countries.id;
@@ -30,13 +31,14 @@ export default function Register(props) {
       country,
     };
     console.log(payload);
-    /*   try {
+
+    try {
       authKit
         .register(email, password, lastName, firstName, country)
         .then((res) => {
           if (res.status !== 201) {
             res.json().then((data) => {
-              setErrorMsg(data);
+              setAlert(data, 'danger');
             });
             return;
           }
@@ -51,14 +53,14 @@ export default function Register(props) {
         });
     } catch (err) {
       console.log(err);
-    } */
+    }
   }
   function getCountryList() {
     try {
       authKit.getCountryList().then((res) => {
         if (res.status !== 200) {
           res.json().then((data) => {
-            setErrorMsg(data);
+            setAlert(data, 'danger');
           });
           return;
         }
@@ -71,21 +73,19 @@ export default function Register(props) {
       console.log(err);
     }
   }
+  function setAlert(msg, type) {
+    setAlertMsg({ msg, type });
+    setTimeout(() => {
+      setAlertMsg(null);
+    }, 1500);
+  }
   useEffect(() => {
     getCountryList();
   }, []);
 
   return (
     <SignInContainer>
-      {errorMsg &&
-        Object.entries(errorMsg).map((msg, index) => {
-          return (
-            <div key={index} className="alert alert-danger mb-3" role="alert">
-              {msg[1]}
-            </div>
-          );
-        })}
-
+      {alertMsg && <Alert alert={alertMsg}></Alert>}
       <h2>Register</h2>
       <span>Sign up with your email and password</span>
       <form onSubmit={handleSubmit}>

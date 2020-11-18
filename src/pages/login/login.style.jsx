@@ -7,6 +7,7 @@ export const SignInContainer = styled.div`
   flex-direction: column;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 5rem;
 `;
 
 export const TextLink = styled(Link)`

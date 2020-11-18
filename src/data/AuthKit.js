@@ -45,6 +45,21 @@ export default class {
     });
   }
 
+  getCountryText(countryId) {
+    // eslint-disable-next-line default-case
+    switch (countryId) {
+      case 1:
+        return 'Sweden';
+      case 2:
+        return 'Denmark';
+      case 3:
+        return 'Norway';
+      case 4:
+        return 'Finland';
+      case 5:
+        return 'Germany';
+    }
+  }
   getPublicHeaders() {
     return {
       'Content-Type': 'application/json',

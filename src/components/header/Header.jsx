@@ -9,6 +9,7 @@ import {
 } from './header.style';
 import AuthKit from '../../data/AuthKit';
 import UserContext from '../../contexts/userContext';
+import CustomButton from '../custom-button/Custom-button';
 
 export default function Header() {
   const { currentUser, setCurrentUser } = useContext(UserContext);
@@ -22,7 +23,7 @@ export default function Header() {
       <OptionContainer>
         {currentUser ? (
           <>
-            Welcome : {currentUser.firstName}
+            Welcome : {currentUser && currentUser.firstName}
             <OptionLink to="/home">Home</OptionLink>
             <OptionLink to="/posts">Posts</OptionLink>
             <OptionDiv
@@ -31,12 +32,21 @@ export default function Header() {
                 setCurrentUser(null);
               }}
             >
+              <i className="fa fa-sign-out-alt" />
               Logout
+            </OptionDiv>
+            <OptionDiv>
+              <OptionLink to="/posts/create/">
+                <CustomButton>Write a Post</CustomButton>
+              </OptionLink>
             </OptionDiv>
           </>
         ) : (
           <>
-            <OptionLink to="/login">Login</OptionLink>
+            <OptionLink to="/login">
+              <i className="fa fa-sign-in-alt"></i>
+              Login
+            </OptionLink>
           </>
         )}
       </OptionContainer>

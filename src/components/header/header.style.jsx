@@ -12,6 +12,7 @@ export const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 25px;
+  box-shadow: 0px 1px 10px #888888;
 `;
 /* Styled Components Inheritance */
 export const LogoContainer = styled(Link)`

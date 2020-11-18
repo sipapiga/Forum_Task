@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
-import FormInput from '../../components/form-input/Form-input';
+
 import { SignInContainer, TextLink } from './login.style';
 import AuthKit from '../../data/AuthKit';
+
+import FormInput from '../../components/form-input/Form-input';
 import CustomButton from '../../components/custom-button/Custom-button';
 import UserContext from '../../contexts/userContext';
+import Alert from '../../components/alert/Alert';
 
 export default function Login(props) {
   const [email, setEmail] = useState('');
@@ -20,7 +23,7 @@ export default function Login(props) {
       authKit.login(email, password).then((res) => {
         if (res.status !== 200) {
           res.json().then((data) => {
-            setAlertMsg(data);
+            setAlert(data, 'danger');
           });
           return;
         }
@@ -48,33 +51,21 @@ export default function Login(props) {
       console.log(err);
     }
   }
-
-  useEffect(() => {
-    if (props.location.state !== null) {
-      setAlertMsg(props.location.state);
-    }
+  function setAlert(msg, type) {
+    setAlertMsg({ msg, type });
     setTimeout(() => {
       setAlertMsg(null);
     }, 1500);
+  }
+
+  useEffect(() => {
+    if (props.location.state !== undefined) {
+      setAlert(props.location.state, 'success');
+    }
   }, []);
   return (
     <SignInContainer>
-      {alertMsg &&
-        Object.entries(alertMsg).map((msg, index) => {
-          if (msg[0] === 'successMsg') {
-            return (
-              <div key={index} className="alert alert-success" role="alert">
-                {msg[1]}
-              </div>
-            );
-          } else {
-            return (
-              <div key={index} className="alert alert-danger" role="alert">
-                {msg[1]}
-              </div>
-            );
-          }
-        })}
+      {alertMsg && <Alert alert={alertMsg}></Alert>}
       <h2>Login</h2>
       <span>Sign in with your email and password</span>
 
