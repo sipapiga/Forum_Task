@@ -21,7 +21,11 @@ export default function Posts() {
           return;
         }
         res.json().then((data) => {
-          setPostListData(data.results);
+          setPostListData(
+            data.results
+              .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
+              .reverse()
+          );
         });
       });
     } catch (err) {
@@ -36,45 +40,60 @@ export default function Posts() {
   const renderedPostList =
     postListData &&
     postListData.map((post) => {
-      console.log(post.author);
       return (
-        <PostContainer className="ui grey segment middle aligned divided list mt-4">
-          <div className="item">
-            <div className="right floated content">
+        <tbody>
+          <tr>
+            <PostLink to={`/posts/${post.id}`}>
+              <td>{post.title}</td>
+            </PostLink>
+            <td className="left aligned">
               {forumKit.getCategoryText(post.category) && (
-                <PostCategoryChips>
+                <PostCategoryChips
+                  bgColor={forumKit.getCategoryText(post.category)[1]}
+                >
                   <PostChipLink to={`/posts/categories/${post.category}`}>
-                    {forumKit.getCategoryText(post.category)}
+                    {forumKit.getCategoryText(post.category)[0]}
                   </PostChipLink>
                 </PostCategoryChips>
               )}
-            </div>
-            <div class="content">
-              <PostLink className="header" to={`/posts/${post.id}`}>
-                {post.title}
-              </PostLink>
-              <div className="description">
-                <img
-                  className="ui avatar image"
-                  src={faker.image.avatar()}
-                  alt=""
-                />
-                <b> Written by </b>
-                {post.author ? <>{post.author.firstName}</> : <>Anonym</>} |
-                <b> Published </b> {moment(post.createdAt).fromNow()}
-              </div>
-            </div>
-          </div>
-        </PostContainer>
+            </td>
+            <td className="center aligned">
+              {post.author ? <>{post.author.firstName}</> : <>Anonym</>}
+            </td>
+            <td>
+              {' '}
+              <PostChipLink to={`/posts/${post.id}`}>
+                <p className="text-secondary">
+                  {post.countResponses ? post.countResponses : 0}
+                </p>
+              </PostChipLink>
+            </td>
+            <td>{post.viewCount}</td>
+            <td>{moment(post.createdAt).fromNow()}</td>
+          </tr>
+        </tbody>
       );
     });
 
   return (
-    <div className="container mb-5">
-      <div className="row">
-        <div className="col-md-8"> {renderedPostList}</div>
-        <div className="col-md-4"></div>
-      </div>
+    <div
+      className="container mb-3"
+      style={{ maxHeight: '85vh', overflowY: 'scroll' }}
+    >
+      {' '}
+      <table className="ui selectable table">
+        <thead>
+          <tr>
+            <th>Topic</th>
+            <th>Category</th>
+            <th>Written by</th>
+            <th>Replies</th>
+            <th>Views</th>
+            <th className="right aligned">Published </th>
+          </tr>
+        </thead>
+        {renderedPostList}
+      </table>
     </div>
   );
 }

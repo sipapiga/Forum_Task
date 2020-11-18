@@ -2,6 +2,22 @@ a {
   text-decoration: none !important;
   color: black !important;
 }
+
 * {
   box-sizing: border-box;
+}
+body {
+  background-color: #ebeff2 !important;
+}
+table th {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+.ql-editor {
+  min-height: 150px !important;
+  max-height: 200px;
+  overflow: hidden;
+  overflow-y: scroll;
 }

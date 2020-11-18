@@ -5,9 +5,9 @@ export const SignInContainer = styled.div`
   width: 450px;
   display: flex;
   flex-direction: column;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 5rem;
+  margin: 5rem auto 3rem auto;
+  background-color: #fff;
+  padding: 30px;
 `;
 
 export const TextLink = styled(Link)`

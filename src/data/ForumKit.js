@@ -16,11 +16,11 @@ export default class {
     // eslint-disable-next-line default-case
     switch (categoryId) {
       case 1:
-        return 'Category 1';
+        return ['Category 1', '#f15d2f'];
       case 2:
-        return 'Category 2';
+        return ['Category 2', '#814ca5'];
       case 3:
-        return 'Category 3';
+        return ['Category 3', '#1e7db5'];
       default:
         return null;
     }
@@ -36,6 +36,23 @@ export default class {
     });
   }
   createPost(payload) {
+    return fetch(GET_POSTS_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: authKit.getPrivateHeaders(),
+    });
+  }
+  getPost(id) {
+    return fetch(GET_POSTS_URL + id, {
+      headers: authKit.getPrivateHeaders(),
+    });
+  }
+  getComments(id) {
+    return fetch(`${ROOT_URL}/api/v1/forum/posts/${id}/replies`, {
+      headers: authKit.getPrivateHeaders(),
+    });
+  }
+  createComment(payload) {
     return fetch(GET_POSTS_URL, {
       method: 'POST',
       body: JSON.stringify(payload),

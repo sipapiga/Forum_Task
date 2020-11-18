@@ -6,7 +6,6 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 
 export default function CategoryList(props) {
-  console.log(props);
   const [postListByCategory, setPostListByCategory] = useState(null);
   const ID = props.computedMatch.params.id;
   const forumKit = new ForumKit();
@@ -36,14 +35,13 @@ export default function CategoryList(props) {
       <h2>{postListByCategory && postListByCategory.title}</h2>
       <div className="ui segment">
         {postListByCategory &&
-          Object.entries(postListByCategory.posts).map((post) => {
-            console.log(post);
+          postListByCategory.posts.map((post) => {
             return (
-              <div className="ui brown segment">
+              <div key={post.id} className="ui brown segment">
                 <div className="item">
-                  <div class="content">
-                    <Link className="header" to={`/posts/${post[1].id}`}>
-                      <h4 className="mb-3"> {post[1].title}</h4>
+                  <div className="content">
+                    <Link className="header" to={`/posts/${post.id}`}>
+                      <h4 className="mb-3"> {post.title}</h4>
                     </Link>
                     <div className="description">
                       <img
@@ -52,12 +50,12 @@ export default function CategoryList(props) {
                         alt=""
                       />
                       <b> Written by </b>
-                      {post[1].author ? (
-                        <>{post[1].author.firstName}</>
+                      {post.author ? (
+                        <>{post.author.firstName}</>
                       ) : (
                         <>Anonym</>
                       )}{' '}
-                      |<b> Published </b> {moment(post[1].createdAt).fromNow()}
+                      |<b> Published </b> {moment(post.createdAt).fromNow()}
                     </div>
                   </div>
                 </div>

@@ -1,44 +1,45 @@
 import React, { useContext } from 'react';
-import faker, { date } from 'faker';
+
+import faker from 'faker';
+import { Link } from 'react-router-dom';
+
 import UserContext from '../../contexts/userContext';
 import Authkit from '../../data/AuthKit';
 import CustomButton from '../../components/custom-button/Custom-button';
-import { Link } from 'react-router-dom';
+import Row from '../../components/row/Row';
+import { HomeContainer } from './home.style';
 
 export default function Home() {
   const { currentUser } = useContext(UserContext);
   const authKit = new Authkit();
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-md-4 col-sm-12">
+    <div className="container-fluid">
+      <div className="row" style={{ height: '90vh' }}>
+        <HomeContainer className="col-md-4 col-sm-12 ">
           <img
-            className="ui medium circular image"
+            className="ui medium circular image centered"
             src={faker.image.people()}
             alt=""
           />
           <div className="container mt-5">
-            <div className="d-flex justify-content-around">
-              <p className="font-weight-bold">Firstname :</p>
-              <p>{currentUser && currentUser.firstName}</p>
-            </div>
-            <div className="d-flex justify-content-around">
-              <p className="font-weight-bold">LastName :</p>
-              <p>{currentUser && currentUser.lastName}</p>
-            </div>
-            <div className="d-flex justify-content-around">
-              <p className="font-weight-bold">Email :</p>
-              <p>{currentUser && currentUser.email}</p>
-            </div>
-            <div className="d-flex justify-content-around">
-              <p className="font-weight-bold">Country :</p>
-              <p>
-                {currentUser && authKit.getCountryText(currentUser.country)}
-              </p>
-            </div>
+            <Row
+              currentUser={currentUser && currentUser.firstName}
+              text="First Name"
+            />
+            <Row
+              currentUser={currentUser && currentUser.lastName}
+              text="Last Name"
+            />
+            <Row currentUser={currentUser && currentUser.email} text="Email" />
+            <Row
+              currentUser={authKit.getCountryText(
+                currentUser && currentUser.country
+              )}
+              text="Country"
+            />
           </div>
-        </div>
+        </HomeContainer>
         <div className="col-md-8 col-sm-12">
           <div className="jumbotron">
             <h1 className="display-4">Forum 1.0</h1>

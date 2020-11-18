@@ -65,7 +65,6 @@ export default function Register(props) {
           return;
         }
         res.json().then((data) => {
-          console.log(data);
           setOptions(data.results);
         });
       });

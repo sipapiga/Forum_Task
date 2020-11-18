@@ -7,9 +7,9 @@ import 'react-quill/dist/quill.snow.css';
 import { CreatePostButton } from './post.style';
 import FormInput from '../../components/form-input/Form-input';
 import ForumKit from '../../data/ForumKit';
+import { modules, formats } from '../../assets/quillSetup';
 
 function CreatePost(props) {
-  console.log(props);
   const [content, setContent] = useState('');
   const [title, setTitle] = useState('');
   const [categories, setCategories] = useState([]);
@@ -57,25 +57,22 @@ function CreatePost(props) {
 
   const renderedCategories =
     categories &&
-    Object.entries(categories).map((category) => {
+    categories.map((category) => {
       return (
-        <>
-          <ul
-            key={category[1].id}
-            style={{ maxHeight: '200px', overflowY: 'scroll' }}
-          >
+        <div key={category.id}>
+          <ul>
             <li className="list-unstyled">
               <input
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 type="radio"
                 className="form-check-input"
-                value={category[1].id}
+                value={category.id}
                 name="exampleRadios"
               />
-              <label className="form-check-label">{category[1].title}</label>
+              <label className="form-check-label">{category.title}</label>
             </li>
           </ul>
-        </>
+        </div>
       );
     });
 
@@ -84,7 +81,10 @@ function CreatePost(props) {
   }, []);
 
   return (
-    <div className="container">
+    <div
+      className="container"
+      style={{ backgroundColor: 'white', height: '80vh' }}
+    >
       <div className="row">
         <div className="col-md-9">
           <form onSubmit={handleSubmit}>
@@ -96,14 +96,20 @@ function CreatePost(props) {
               onChange={(e) => setTitle(e.target.value)}
               required
             />
-            <ReactQuill theme="snow" value={content} onChange={setContent} />
-            <CreatePostButton type="submit" bgColor="#215fa2" className>
+            <ReactQuill
+              theme="snow"
+              value={content}
+              onChange={setContent}
+              formats={formats}
+              modules={modules}
+            />
+            <CreatePostButton type="submit" bgColor="#215fa2">
               Submit
             </CreatePostButton>
           </form>
         </div>
         <div className="col-md-3">
-          <h4>Categories</h4>
+          <h4 className="mt-5">Categories</h4>
           <hr />
           {renderedCategories}
         </div>

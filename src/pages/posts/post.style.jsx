@@ -17,15 +17,14 @@ export const PostChipLink = styled(PostLink)`
   color: #fff !important;
 `;
 export const PostCategoryChips = styled.div`
-  padding: 0 12px;
-  background-color: #51565a;
-  border-radius: 100px;
+  width: ${(props) => props.width || ' 120%; '};
+  padding: 0 10px;
+  background-color: ${(props) => props.bgColor || '#51565a'};
   display: inline-flex;
-  margin: 4px;
   color: #fff;
   align-items: center;
   height: 32px;
-  font-size: 14px;
+  font-size: 10px !important;
   cursor: pointer;
   border: none;
 `;
@@ -44,4 +43,14 @@ export const CreatePostButton = styled(CustomButton)`
     background-color: #0c4e94;
     border-color: #0c4e94 !important;
   }
+`;
+export const ContentDiv = styled.div`
+  margin-top: 50px;
+`;
+
+export const PostDetailsDiv = styled(PostContainer)`
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 5px;
+  justify-content: flex-start;
 `;

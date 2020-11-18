@@ -15,7 +15,7 @@ import Register from './pages/register/Register';
 import CreatePost from './pages/posts/CreatePost';
 import PostDetails from './pages/posts/PostDetails';
 import CategoryList from './pages/category/CategoryList';
-import NotFoundPage from './pages/NotFoundPage';
+import NotFoundPage from './pages/404/NotFoundPage';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -61,7 +61,7 @@ function App() {
             ></ProtectedRoute>
             <Route path="/login" component={Login}></Route>
             <Route path="/register" component={Register}></Route>
-            <Route path="/404" component={NotFoundPage}></Route>
+            <Route component={NotFoundPage}></Route>
           </Switch>
         </PostContext.Provider>
       </UserContext.Provider>
