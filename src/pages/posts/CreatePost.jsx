@@ -14,6 +14,7 @@ function CreatePost(props) {
   const [title, setTitle] = useState('');
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [loading, setLoading] = useState(false);
   const forumKit = new ForumKit();
 
   function handleSubmit(e) {
@@ -26,7 +27,6 @@ function CreatePost(props) {
     console.log(payload);
     try {
       forumKit.createPost(payload).then((res) => {
-        console.log(res);
         if (res.status !== 201) {
           return;
         }
@@ -48,6 +48,7 @@ function CreatePost(props) {
         }
         res.json().then((data) => {
           setCategories(data.results);
+          setLoading(true);
         });
       });
     } catch (err) {
@@ -111,7 +112,11 @@ function CreatePost(props) {
         <div className="col-md-3">
           <h4 className="mt-5">Categories</h4>
           <hr />
-          {renderedCategories}
+          {loading ? (
+            renderedCategories
+          ) : (
+            <div className="ui loading segment" style={{ height: '50%' }}></div>
+          )}
         </div>
       </div>
     </div>

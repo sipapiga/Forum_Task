@@ -9,24 +9,27 @@ export const PostContainer = styled.div`
 
 export const PostLink = styled(Link)`
   padding: 10px;
-  padding-left: 0px;
   font-size: 16px;
+  margin-left: 10px;
 `;
-export const PostChipLink = styled(PostLink)`
-  padding: 0px;
+export const PostChipLink = styled(Link)`
   color: #fff !important;
+  font-size: 14px;
+  text-align: center;
+  align-items: center;
+  padding: 5px;
 `;
 export const PostCategoryChips = styled.div`
-  width: ${(props) => props.width || ' 120%; '};
-  padding: 0 10px;
+  width: ${(props) => props.width || '100%; '};
+  padding: 2px;
   background-color: ${(props) => props.bgColor || '#51565a'};
   display: inline-flex;
   color: #fff;
   align-items: center;
-  height: 32px;
-  font-size: 10px !important;
+  height: 100%;
   cursor: pointer;
   border: none;
+  border-radius: 5px;
 `;
 /* Styled Components Inheritance */
 export const CreatePostButton = styled(CustomButton)`

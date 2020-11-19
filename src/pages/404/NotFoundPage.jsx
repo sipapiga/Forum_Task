@@ -6,9 +6,13 @@ export default function NotFoundPage() {
   return (
     <Container>
       <Text>
-        4 <i class="fa fa-times-circle"></i> 4 | Page not found
+        <strong className="text-primary"> 4 </strong>
+        <i class="fa fa-times-circle"></i>
+        <strong className="text-warning"> 4</strong>| Page not found
         <p className="display-4 text-white">
-          Let's get you <Link to="/home">back</Link>{' '}
+          <div className="text-secondary">
+            Let's get you <Link to="/home">back</Link>
+          </div>
         </p>
       </Text>
     </Container>

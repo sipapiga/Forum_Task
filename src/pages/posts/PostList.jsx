@@ -1,18 +1,18 @@
-import React, { useEffect, useContext } from 'react';
-import faker from 'faker';
+import React, { useEffect, useContext, useState } from 'react';
 import moment from 'moment';
 import ForumKit from '../../data/ForumKit';
-import PostContext from '../../contexts/postContext';
-import {
-  PostContainer,
-  PostLink,
-  PostCategoryChips,
-  PostChipLink,
-} from './post.style';
+import PostListContext from '../../contexts/postListContext';
+import { PostLink, PostCategoryChips, PostChipLink } from './post.style';
+import CustomButton from '../../components/custom-button/Custom-button';
+import Breadcrumb from '../../components/breadcrumb/Breadcrumb';
 
 export default function Posts() {
-  const { postListData, setPostListData } = useContext(PostContext);
+  const { postListData, setPostListData } = useContext(PostListContext);
+  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [lastPage, setLastPage] = useState(false);
   const forumKit = new ForumKit();
+  const items = [{ label: 'Recent' }, { label: 'Top Views' }];
 
   function getPosts() {
     try {
@@ -21,11 +21,35 @@ export default function Posts() {
           return;
         }
         res.json().then((data) => {
+          if (data.next == null) {
+            setLastPage(true);
+          }
           setPostListData(
             data.results
               .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
               .reverse()
           );
+
+          setLoading(true);
+          setPage(page + 1);
+        });
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  function loadMorePosts(page) {
+    console.log(page);
+    try {
+      forumKit.loadMorePosts(page).then((res) => {
+        if (res.status !== 200) {
+          return;
+        }
+        res.json().then((data) => {
+          if (data.next == null) {
+            setLastPage(true);
+          }
+          setPostListData([...postListData, ...data.results]);
         });
       });
     } catch (err) {
@@ -41,12 +65,12 @@ export default function Posts() {
     postListData &&
     postListData.map((post) => {
       return (
-        <tbody>
+        <tbody key={post.id}>
           <tr>
-            <PostLink to={`/posts/${post.id}`}>
-              <td>{post.title}</td>
-            </PostLink>
-            <td className="left aligned">
+            <td className="selectable">
+              <PostLink to={`/posts/${post.id}`}>{post.title}</PostLink>
+            </td>
+            <td className="left aligned selectable categoryColumn">
               {forumKit.getCategoryText(post.category) && (
                 <PostCategoryChips
                   bgColor={forumKit.getCategoryText(post.category)[1]}
@@ -57,11 +81,10 @@ export default function Posts() {
                 </PostCategoryChips>
               )}
             </td>
-            <td className="center aligned">
+            <td className="right aligned">
               {post.author ? <>{post.author.firstName}</> : <>Anonym</>}
             </td>
-            <td>
-              {' '}
+            <td className="selectable">
               <PostChipLink to={`/posts/${post.id}`}>
                 <p className="text-secondary">
                   {post.countResponses ? post.countResponses : 0}
@@ -75,25 +98,62 @@ export default function Posts() {
       );
     });
 
+  function getTopPosts(selected) {
+    if (selected[0] === 'Top Views') {
+      setPostListData(
+        [...postListData]
+          .sort((a, b) => (a.viewCount > b.viewCount ? 1 : -1))
+          .reverse()
+      );
+    }
+    if (selected[0] === 'Recent') {
+      setPostListData(
+        [...postListData]
+          .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
+          .reverse()
+      );
+    }
+    console.log(postListData);
+  }
+
   return (
     <div
-      className="container mb-3"
+      className="container-fluid mb-3"
       style={{ maxHeight: '85vh', overflowY: 'scroll' }}
     >
-      {' '}
-      <table className="ui selectable table">
-        <thead>
-          <tr>
-            <th>Topic</th>
-            <th>Category</th>
-            <th>Written by</th>
-            <th>Replies</th>
-            <th>Views</th>
-            <th className="right aligned">Published </th>
-          </tr>
-        </thead>
-        {renderedPostList}
-      </table>
+      <Breadcrumb onClick={getTopPosts}>
+        {items.map((item) => {
+          return <div>{item.label} </div>;
+        })}
+      </Breadcrumb>
+      {loading ? (
+        <>
+          <table className="ui selectable table">
+            <thead>
+              <tr>
+                <th>Topic</th>
+                <th>Category</th>
+                <th>Written by</th>
+                <th>Replies</th>
+                <th>Views</th>
+                <th>Published </th>
+              </tr>
+            </thead>
+            {renderedPostList}
+          </table>
+          {lastPage ? (
+            <></>
+          ) : (
+            <div className="text-center">
+              <CustomButton onClick={() => loadMorePosts(page)}>
+                Load More
+              </CustomButton>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="ui loading segment" style={{ height: '80vh' }}></div>
+      )}
     </div>
   );
 }

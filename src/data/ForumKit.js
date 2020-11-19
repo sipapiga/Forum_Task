@@ -12,6 +12,11 @@ export default class {
       headers: authKit.getPrivateHeaders(),
     });
   }
+  loadMorePosts(page) {
+    return fetch(GET_POSTS_URL + '?page=' + page, {
+      headers: authKit.getPrivateHeaders(),
+    });
+  }
   getCategoryText(categoryId) {
     // eslint-disable-next-line default-case
     switch (categoryId) {
@@ -47,6 +52,7 @@ export default class {
       headers: authKit.getPrivateHeaders(),
     });
   }
+
   getComments(id) {
     return fetch(`${ROOT_URL}/api/v1/forum/posts/${id}/replies`, {
       headers: authKit.getPrivateHeaders(),

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
 import UserContext from './contexts/userContext';
-import PostContext from './contexts/postContext';
+import PostListContext from './contexts/postListContext';
 import AuthKit from './data/AuthKit';
 import './App.css';
 
@@ -36,7 +36,7 @@ function App() {
   return (
     <div>
       <UserContext.Provider value={{ currentUser, setCurrentUser }}>
-        <PostContext.Provider value={{ postListData, setPostListData }}>
+        <PostListContext.Provider value={{ postListData, setPostListData }}>
           <Header />
           <Switch>
             <ProtectedRoute path="/home" component={Home}></ProtectedRoute>
@@ -63,7 +63,7 @@ function App() {
             <Route path="/register" component={Register}></Route>
             <Route component={NotFoundPage}></Route>
           </Switch>
-        </PostContext.Provider>
+        </PostListContext.Provider>
       </UserContext.Provider>
     </div>
   );

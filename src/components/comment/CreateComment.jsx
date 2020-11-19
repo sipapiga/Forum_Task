@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -7,10 +7,10 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { CreateCommentButton } from './comment.style';
 import ForumKit from '../../data/ForumKit';
-import CommentContext from '../../contexts/commentContext';
+import PostContext from '../../contexts/postContext';
 
 export default function CreateComment({ id }) {
-  const { setCommentListData } = useContext(CommentContext);
+  const { setPostData } = useContext(PostContext);
   const [content, setContent] = useState('');
   const [title, setTitle] = useState('');
   const forumKit = new ForumKit();
@@ -23,33 +23,26 @@ export default function CreateComment({ id }) {
       parent: id,
     };
     try {
-      forumKit.createComment(payload).then((res) => {
-        if (res.status !== 201) {
-          res.json().then((data) => {
-            toast.error(data.content[0]);
-          });
-          return;
-        }
-        toast.dark('Thx for your comment!');
-        fetchCommentList();
-        setContent('');
-        setTitle('');
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }
+      Promise.all([forumKit.createComment(payload), forumKit.getPost(id)]).then(
+        ([res1, res2]) => {
+          if (res1.status !== 201) {
+            res1.json().then((data) => {
+              toast.error(data.content[0]);
+            });
+            return;
+          }
+          toast.dark('Thx for your comment!');
+          setContent('');
+          setTitle('');
 
-  function fetchCommentList() {
-    try {
-      forumKit.getComments(id).then((res) => {
-        if (res.status !== 200) {
-          return;
+          if (res2.status !== 200) {
+            return;
+          }
+          res2.json().then((data) => {
+            setPostData(data);
+          });
         }
-        res.json().then((data) => {
-          setCommentListData(data.results);
-        });
-      });
+      );
     } catch (err) {
       console.log(err);
     }

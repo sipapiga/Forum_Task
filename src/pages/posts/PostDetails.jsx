@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import ForumKit from '../../data/ForumKit';
 import { PostCategoryChips, PostChipLink, ContentDiv } from './post.style';
-import CommentContext from '../../contexts/commentContext';
+import PostContext from '../../contexts/postContext';
 import CommentList from '../../components/comment/CommentList';
 import CreateComment from '../../components/comment/CreateComment';
 
@@ -11,7 +11,6 @@ import moment from 'moment';
 import renderHTML from 'react-render-html';
 
 export default function PostDetails(props) {
-  const [commentListData, setCommentListData] = useState([]);
   const [postData, setPostData] = useState([]);
   const [loading, setLoading] = useState(false);
   const ID = props.computedMatch.params.id;
@@ -32,28 +31,13 @@ export default function PostDetails(props) {
       console.log(err);
     }
   }
-  function fetchCommentList() {
-    try {
-      forumKit.getComments(ID).then((res) => {
-        if (res.status !== 200) {
-          return;
-        }
-        res.json().then((data) => {
-          setCommentListData(data.results);
-        });
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }
 
   useEffect(() => {
     fetchPostData();
-    fetchCommentList();
   }, []);
 
   const renderedPost = postData && (
-    <div className="container-fluid">
+    <div className="container-fluid" key={postData.id}>
       <section>
         <div className="row">
           <img
@@ -91,23 +75,24 @@ export default function PostDetails(props) {
             {postData.content && renderHTML(postData.content)}
           </ContentDiv>
         </div>
-        <CommentContext.Provider
-          value={{ commentListData, setCommentListData }}
-        >
+        <PostContext.Provider value={{ postData, setPostData }}>
           <div className="container reply mt-5 mb-5">
             <section>
               <div className="ui segment">
                 <p className="text-info ">
                   <strong>
-                    {commentListData ? commentListData.length : 0} Comments
+                    {postData ? postData.countResponses : 0} Comments
                   </strong>
                 </p>
                 <CreateComment id={postData.id} />
-                <CommentList id={postData.id} />
+                <CommentList
+                  id={postData.id}
+                  comments={postData && postData.responses}
+                />
               </div>
             </section>
           </div>
-        </CommentContext.Provider>
+        </PostContext.Provider>
       </section>
     </div>
   );

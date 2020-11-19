@@ -1,17 +1,13 @@
-import React, { useContext, useEffect } from 'react';
-import CommentContext from '../../contexts/commentContext';
-import ForumKit from '../../data/ForumKit';
+import React from 'react';
 
 import faker from 'faker';
 import moment from 'moment';
 import renderHTML from 'react-render-html';
 
-export default function CommentList({ id }) {
-  const { commentListData } = useContext(CommentContext);
-
+export default function CommentList({ comments }) {
   const renderedComments =
-    commentListData &&
-    commentListData.map((comment) => {
+    comments &&
+    comments.map((comment) => {
       return (
         <div className="ui relaxed list">
           <div className="item">
@@ -35,5 +31,9 @@ export default function CommentList({ id }) {
         </div>
       );
     });
-  return <div>{renderedComments}</div>;
+  return (
+    <div style={{ maxHeight: '50vh', overflowY: 'scroll' }}>
+      {renderedComments}
+    </div>
+  );
 }
