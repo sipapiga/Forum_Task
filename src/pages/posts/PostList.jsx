@@ -146,7 +146,7 @@ export default function Posts() {
       </Breadcrumb>
       {loading ? (
         <>
-          <table className="ui selectable table">
+          <table className="ui unstackable selectable table">
             <thead>
               <tr>
                 <th>Topic</th>

@@ -22,6 +22,7 @@ export default function PostDetails(props) {
   const [loading, setLoading] = useState(false);
   const ID = props.computedMatch.params.id;
   const [subscribe, setSubscribe] = useState(null);
+  const [isPinned, setIsPinned] = useState(null);
   const forumKit = new ForumKit();
   const authKit = new AuthKit();
 
@@ -36,6 +37,7 @@ export default function PostDetails(props) {
           setPostData(data);
           setLoading(true);
           setSubscribe(data.userSubscribed);
+          setIsPinned(data.isPinned);
         });
       });
     } catch (err) {
@@ -49,7 +51,7 @@ export default function PostDetails(props) {
 
   const renderedPost = postData && (
     <>
-      <section key={postData.id} className="container mt-5 mb-5">
+      <section key={postData.id} className="container mb-5">
         <div className="ui segment">
           <ContentDiv>
             <h2 className="display-5">
@@ -82,11 +84,20 @@ export default function PostDetails(props) {
           <PostDetailsDiv>
             <div className="row ml-1">
               <div className="mr-2">
-                <b className="lead"> Pinned </b>
-                {postData.isPinned ? (
-                  <i className="fa fa-map-pin"></i>
+                {isPinned ? (
+                  <div
+                    class="ui icon button"
+                    onClick={() => setIsPinned(!isPinned)}
+                  >
+                    <i class="thumbtack icon" style={{ color: 'red' }}></i>
+                  </div>
                 ) : (
-                  <i class="fas fa-times"></i>
+                  <div
+                    class="ui icon button"
+                    onClick={() => setIsPinned(!isPinned)}
+                  >
+                    <i class="thumbtack icon"></i>
+                  </div>
                 )}
               </div>
               |
@@ -112,30 +123,20 @@ export default function PostDetails(props) {
             <div className="row mr-2">
               {subscribe ? (
                 <>
-                  <CustomButton
-                    bgColor="#f44545"
-                    padding="0 10px 0 10px"
+                  <div
+                    class="ui icon button"
                     onClick={() => setSubscribe(!subscribe)}
                   >
-                    Unsubscribe
-                  </CustomButton>
-                  <i
-                    className="fas fa-bell"
-                    style={{
-                      margin: 'auto 0px auto 10px',
-                      fontSize: '20px',
-                      color: 'red',
-                    }}
-                  ></i>
+                    <i class="bell icon" style={{ color: 'red' }}></i>
+                  </div>
                 </>
               ) : (
-                <CustomButton
-                  bgColor="#f44545"
-                  padding="0 10px 0 10px"
+                <div
+                  class="ui icon button"
                   onClick={() => setSubscribe(!subscribe)}
                 >
-                  Subscribe
-                </CustomButton>
+                  <i class="bell slash icon"></i>
+                </div>
               )}
             </div>
           </PostDetailsDiv>

@@ -79,27 +79,29 @@ export default function Home() {
     <div className="container-fluid">
       <div className="row" style={{ height: '90vh' }}>
         <HomeContainer className="col-md-4 col-sm-12 ">
-          <img
-            className="ui medium circular image centered"
-            src={faker.image.people()}
-            alt=""
-          />
-          <div className="container mt-5">
-            <Row
-              currentUser={currentUser && currentUser.firstName}
-              text="First Name"
-            />
-            <Row
-              currentUser={currentUser && currentUser.lastName}
-              text="Last Name"
-            />
-            <Row currentUser={currentUser && currentUser.email} text="Email" />
-            <Row
-              currentUser={
-                currentUser && authKit.getCountryText(currentUser.country).name
-              }
-              text="Country"
-            />
+          <div class="ui centered card">
+            <div class="image">
+              <img src={faker.image.people()} alt="" />
+            </div>
+            <div class="content">
+              <div class="header">
+                {currentUser && currentUser.firstName}{' '}
+                {currentUser && currentUser.lastName}
+              </div>
+              <div class="description">
+                <div>{currentUser && currentUser.email}</div>
+                <div>
+                  {currentUser &&
+                    authKit.getCountryText(currentUser.country).name}{' '}
+                  <i
+                    className={`${
+                      currentUser &&
+                      authKit.getCountryText(currentUser.country).flag
+                    }`}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </HomeContainer>
         <div className="col-md-8 col-sm-12">

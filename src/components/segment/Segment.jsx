@@ -25,6 +25,7 @@ export default function Segment({ post, index, postType, colors }) {
               ) : (
                 <>
                   {' '}
+                  <p class={`ui ${colors[index]} right ribbon label`}>Hot</p>
                   <i className="fas fa-eye"></i> <b> Views </b> {post.viewCount}
                 </>
               )}

@@ -37,7 +37,10 @@ export default function Header() {
             </OptionDiv>
             <OptionDiv>
               <OptionLink to="/posts/create/">
-                <CustomButton>Write a Post</CustomButton>
+                <CustomButton>
+                  {' '}
+                  <i class="plus icon"></i>Write a Post
+                </CustomButton>
               </OptionLink>
             </OptionDiv>
           </>
