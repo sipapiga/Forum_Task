@@ -34,7 +34,7 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <>
       <UserContext.Provider value={{ currentUser, setCurrentUser }}>
         <PostListContext.Provider value={{ postListData, setPostListData }}>
           <Header />
@@ -65,7 +65,7 @@ function App() {
           </Switch>
         </PostListContext.Provider>
       </UserContext.Provider>
-    </div>
+    </>
   );
 }
 

@@ -1,54 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
-import ForumKit from '../../data/ForumKit';
-import faker from 'faker';
+import React, { useContext, useEffect } from 'react';
+
 import moment from 'moment';
+import PostListContext from '../../contexts/postListContext';
 import { Link } from 'react-router-dom';
 
 export default function CategoryList(props) {
-  const [postListByCategory, setPostListByCategory] = useState(null);
+  const { postListData } = useContext(PostListContext);
   const ID = props.computedMatch.params.id;
-  const forumKit = new ForumKit();
 
-  function fetchPostbyCategory() {
-    try {
-      forumKit.getPostListByCategory(ID).then((res) => {
-        if (res.status !== 200) {
-          <Redirect to="/404" />;
-          return;
-        }
-        res.json().then((data) => {
-          setPostListByCategory(data);
-        });
-      });
-    } catch (err) {
-      console.log(err);
+  function isCategoryFound(post) {
+    if (post.category) {
+      return post.category == ID; //ID and post.category is not the same type
     }
-  }
 
-  useEffect(() => {
-    fetchPostbyCategory();
-  }, []);
+    return false;
+  }
+  const postsByCategory =
+    postListData && postListData.filter(isCategoryFound, ID);
+
+  useEffect(() => {}, [postListData]);
 
   return (
     <div className="container">
-      <h2>{postListByCategory && postListByCategory.title}</h2>
       <div className="ui segment">
-        {postListByCategory &&
-          postListByCategory.posts.map((post) => {
+        <h2>Category {ID}</h2>
+        {postsByCategory &&
+          postsByCategory.map((post) => {
             return (
               <div key={post.id} className="ui brown segment">
                 <div className="item">
                   <div className="content">
                     <Link className="header" to={`/posts/${post.id}`}>
-                      <h4 className="mb-3"> {post.title}</h4>
+                      <h4 className="mb-3">
+                        {' '}
+                        <i class="fas fa-star text-info"></i> {post.title}
+                      </h4>
                     </Link>
                     <div className="description">
-                      <img
-                        className="ui avatar image"
-                        src={faker.image.avatar()}
-                        alt=""
-                      />
                       <b> Written by </b>
                       {post.author ? (
                         <>{post.author.firstName}</>

@@ -12,5 +12,6 @@ export const BreadCrumbText = styled.div`
   &:hover {
     font-weight: bold;
     text-decoration: underline wavy blue !important;
+    cursor: pointer;
   }
 `;

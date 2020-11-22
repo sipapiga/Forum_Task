@@ -9,8 +9,10 @@ import Breadcrumb from '../../components/breadcrumb/Breadcrumb';
 export default function Posts() {
   const { postListData, setPostListData } = useContext(PostListContext);
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(false);
+  const [sort, setSort] = useState('createdAt');
+
   const forumKit = new ForumKit();
   const items = [{ label: 'Recent' }, { label: 'Top Views' }];
 
@@ -31,17 +33,16 @@ export default function Posts() {
           );
 
           setLoading(true);
-          setPage(page + 1);
+          setCurrentPage(2);
         });
       });
     } catch (err) {
       console.log(err);
     }
   }
-  function loadMorePosts(page) {
-    console.log(page);
+  function loadMorePosts(currentPage) {
     try {
-      forumKit.loadMorePosts(page).then((res) => {
+      forumKit.loadMorePosts(currentPage).then((res) => {
         if (res.status !== 200) {
           return;
         }
@@ -49,11 +50,27 @@ export default function Posts() {
           if (data.next == null) {
             setLastPage(true);
           }
-          setPostListData([...postListData, ...data.results]);
+          sortPostList(sort, data);
+          setCurrentPage(currentPage + 1);
         });
       });
     } catch (err) {
       console.log(err);
+    }
+  }
+  function sortPostList(sort, data) {
+    if (sort === 'viewCount') {
+      setPostListData(
+        [...postListData, ...data.results]
+          .sort((a, b) => (a.viewCount > b.viewCount ? 1 : -1))
+          .reverse()
+      );
+    } else {
+      setPostListData(
+        [...postListData, ...data.results]
+          .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
+          .reverse()
+      );
     }
   }
 
@@ -67,21 +84,21 @@ export default function Posts() {
       return (
         <tbody key={post.id}>
           <tr>
-            <td className="selectable">
+            <td className="selectable" style={{ width: '60%' }}>
               <PostLink to={`/posts/${post.id}`}>{post.title}</PostLink>
             </td>
             <td className="left aligned selectable categoryColumn">
               {forumKit.getCategoryText(post.category) && (
-                <PostCategoryChips
-                  bgColor={forumKit.getCategoryText(post.category)[1]}
-                >
-                  <PostChipLink to={`/posts/categories/${post.category}`}>
+                <PostChipLink to={`/posts/categories/${post.category}`}>
+                  <PostCategoryChips
+                    bgColor={forumKit.getCategoryText(post.category)[1]}
+                  >
                     {forumKit.getCategoryText(post.category)[0]}
-                  </PostChipLink>
-                </PostCategoryChips>
+                  </PostCategoryChips>
+                </PostChipLink>
               )}
             </td>
-            <td className="right aligned">
+            <td className="center aligned">
               {post.author ? <>{post.author.firstName}</> : <>Anonym</>}
             </td>
             <td className="selectable">
@@ -100,6 +117,7 @@ export default function Posts() {
 
   function getTopPosts(selected) {
     if (selected[0] === 'Top Views') {
+      setSort('viewCount');
       setPostListData(
         [...postListData]
           .sort((a, b) => (a.viewCount > b.viewCount ? 1 : -1))
@@ -107,13 +125,13 @@ export default function Posts() {
       );
     }
     if (selected[0] === 'Recent') {
+      setSort('createdAt');
       setPostListData(
         [...postListData]
           .sort((a, b) => (a.createdAt > b.createdAt ? 1 : -1))
           .reverse()
       );
     }
-    console.log(postListData);
   }
 
   return (
@@ -122,8 +140,8 @@ export default function Posts() {
       style={{ maxHeight: '85vh', overflowY: 'scroll' }}
     >
       <Breadcrumb onClick={getTopPosts}>
-        {items.map((item) => {
-          return <div>{item.label} </div>;
+        {items.map((item, index) => {
+          return <div key={index}>{item.label} </div>;
         })}
       </Breadcrumb>
       {loading ? (
@@ -145,7 +163,7 @@ export default function Posts() {
             <></>
           ) : (
             <div className="text-center">
-              <CustomButton onClick={() => loadMorePosts(page)}>
+              <CustomButton onClick={() => loadMorePosts(currentPage)}>
                 Load More
               </CustomButton>
             </div>

@@ -1,20 +1,29 @@
 import React, { useState, useEffect } from 'react';
 
 import ForumKit from '../../data/ForumKit';
-import { PostCategoryChips, PostChipLink, ContentDiv } from './post.style';
+import AuthKit from '../../data/AuthKit';
+import {
+  PostChipLink,
+  ContentDiv,
+  PostDetailCategory,
+  PostDetailsDiv,
+} from './post.style';
 import PostContext from '../../contexts/postContext';
 import CommentList from '../../components/comment/CommentList';
 import CreateComment from '../../components/comment/CreateComment';
 
-import faker from 'faker';
 import moment from 'moment';
 import renderHTML from 'react-render-html';
+import RelatedPost from '../../components/relatedPost/RelatedPost';
+import CustomButton from '../../components/custom-button/Custom-button';
 
 export default function PostDetails(props) {
-  const [postData, setPostData] = useState([]);
+  const [postData, setPostData] = useState(null);
   const [loading, setLoading] = useState(false);
   const ID = props.computedMatch.params.id;
+  const [subscribe, setSubscribe] = useState(null);
   const forumKit = new ForumKit();
+  const authKit = new AuthKit();
 
   function fetchPostData() {
     try {
@@ -23,8 +32,10 @@ export default function PostDetails(props) {
           return;
         }
         res.json().then((data) => {
+          console.log(data);
           setPostData(data);
           setLoading(true);
+          setSubscribe(data.userSubscribed);
         });
       });
     } catch (err) {
@@ -37,36 +48,24 @@ export default function PostDetails(props) {
   }, []);
 
   const renderedPost = postData && (
-    <div className="container-fluid" key={postData.id}>
-      <section>
-        <div className="row">
-          <img
-            src={faker.image.nature()}
-            alt=""
-            className="img-fluid"
-            style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }}
-          />
-        </div>
-        <div className="container content">
-          <ContentDiv className="text-center">
-            <h1 className="display-4">{postData.title}</h1>
+    <>
+      <section key={postData.id} className="container mt-5 mb-5">
+        <div className="ui segment">
+          <ContentDiv>
+            <h2 className="display-5">
+              <i class="fas fa-star text-primary"></i> {postData.title}
+            </h2>
           </ContentDiv>
           <ContentDiv className="text-right">
-            <b className="lead"> Written by </b>
-            {postData.author ? <>{postData.author.firstName}</> : <>Anonym</>} |
-            <b className="lead"> Published </b>{' '}
-            {moment(postData.createdAt).fromNow()}
-          </ContentDiv>
-          <ContentDiv>
             {postData.category ? (
-              <PostCategoryChips
+              <PostDetailCategory
                 bgColor={forumKit.getCategoryText(postData.category.id)[1]}
                 width="10%"
               >
                 <PostChipLink to={`/posts/categories/${postData.category.id}`}>
                   {postData.category && postData.category.title}
                 </PostChipLink>
-              </PostCategoryChips>
+              </PostDetailCategory>
             ) : (
               <></>
             )}
@@ -74,35 +73,122 @@ export default function PostDetails(props) {
           <ContentDiv>
             {postData.content && renderHTML(postData.content)}
           </ContentDiv>
-        </div>
-        <PostContext.Provider value={{ postData, setPostData }}>
-          <div className="container reply mt-5 mb-5">
-            <section>
-              <div className="ui segment">
-                <p className="text-info ">
-                  <strong>
-                    {postData ? postData.countResponses : 0} Comments
-                  </strong>
-                </p>
-                <CreateComment id={postData.id} />
-                <CommentList
-                  id={postData.id}
-                  comments={postData && postData.responses}
-                />
+          <ContentDiv>
+            <p class="font-weight-light">
+              Last Updated :{' '}
+              {moment(postData.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
+            </p>
+          </ContentDiv>
+          <PostDetailsDiv>
+            <div className="row ml-1">
+              <div className="mr-2">
+                <b className="lead"> Pinned </b>
+                {postData.isPinned ? (
+                  <i className="fa fa-map-pin"></i>
+                ) : (
+                  <i class="fas fa-times"></i>
+                )}
               </div>
-            </section>
-          </div>
-        </PostContext.Provider>
+              |
+              <div className="ml-2">
+                {' '}
+                <b className="lead"> Written by </b>
+                {postData.author ? (
+                  <>
+                    {postData.author.firstName}{' '}
+                    <i
+                      className={`${
+                        authKit.getCountryText(postData.country).flag
+                      }`}
+                    />
+                  </>
+                ) : (
+                  <>Anonym</>
+                )}{' '}
+                |<b className="lead"> Published </b>{' '}
+                {moment(postData.createdAt).fromNow()}
+              </div>
+            </div>
+            <div className="row mr-2">
+              {subscribe ? (
+                <>
+                  <CustomButton
+                    bgColor="#f44545"
+                    padding="0 10px 0 10px"
+                    onClick={() => setSubscribe(!subscribe)}
+                  >
+                    Unsubscribe
+                  </CustomButton>
+                  <i
+                    className="fas fa-bell"
+                    style={{
+                      margin: 'auto 0px auto 10px',
+                      fontSize: '20px',
+                      color: 'red',
+                    }}
+                  ></i>
+                </>
+              ) : (
+                <CustomButton
+                  bgColor="#f44545"
+                  padding="0 10px 0 10px"
+                  onClick={() => setSubscribe(!subscribe)}
+                >
+                  Subscribe
+                </CustomButton>
+              )}
+            </div>
+          </PostDetailsDiv>
+        </div>
       </section>
-    </div>
+      <PostContext.Provider value={{ postData, setPostData }}>
+        <section className="container reply mt-5 mb-5">
+          <div>
+            <p className="text-info ">
+              <strong>
+                <i className="fa fa-comments"></i>{' '}
+                {postData ? postData.countResponses : 0} Comments
+              </strong>
+            </p>
+            <hr />
+          </div>
+
+          <CommentList
+            id={postData.id}
+            comments={postData && postData.responses}
+          />
+          <div className="mt-5">
+            <p className="text-info ">
+              <i className="fas fa-comment-dots ml-1"></i>{' '}
+              <strong>Join the discussion</strong>
+            </p>
+            <hr />
+          </div>
+          {postData.isClosed ? (
+            <>
+              <div className="ui segment">
+                <p>This duscussion is close</p>
+              </div>
+            </>
+          ) : (
+            <CreateComment id={postData.id} />
+          )}
+        </section>
+        <section className="container mt-5 mb-5">
+          <RelatedPost postData={postData}></RelatedPost>
+        </section>
+      </PostContext.Provider>
+    </>
   );
 
   return (
     <>
       {loading ? (
-        <div style={{ backgroundColor: 'white' }}>{renderedPost}</div>
+        <div className="container-fluid" style={{ backgroundColor: 'white' }}>
+          {renderedPost}
+        </div>
       ) : (
-        <div class="ui loading segment" style={{ height: '80vh' }}>
+        <div className="ui loading segment" style={{ height: '80vh' }}>
           <p>Loading...</p>
         </div>
       )}

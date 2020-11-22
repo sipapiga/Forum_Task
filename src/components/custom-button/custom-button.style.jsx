@@ -9,7 +9,7 @@ export const StyledButton = styled.button`
     letter-spacing: 0.5px;
     line-height: 50px;
     text-transform: uppercase;
-    padding: 0 35px 0 35px;
+    padding: ${(props) => props.padding || '0 25px 0 25px'}; 
     text-align: center;
     text-decoration: none;
     font-size: 15px;

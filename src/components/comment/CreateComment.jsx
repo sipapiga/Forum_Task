@@ -10,7 +10,7 @@ import ForumKit from '../../data/ForumKit';
 import PostContext from '../../contexts/postContext';
 
 export default function CreateComment({ id }) {
-  const { setPostData } = useContext(PostContext);
+  const { postData, setPostData } = useContext(PostContext);
   const [content, setContent] = useState('');
   const [title, setTitle] = useState('');
   const forumKit = new ForumKit();
@@ -52,11 +52,8 @@ export default function CreateComment({ id }) {
     <div className="container-fluid mb-5">
       <ToastContainer />
       <div className="ui segment">
-        <h3 className="text-secondary">
-          <strong>Join the discussion</strong>
-        </h3>
         <form onSubmit={handleSubmit}>
-          <div class="form-group">
+          <div className="form-group">
             <label>Title</label>
             <input
               type="text"

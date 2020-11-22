@@ -49,15 +49,15 @@ export default class {
     // eslint-disable-next-line default-case
     switch (countryId) {
       case 1:
-        return 'Sweden';
+        return { name: 'Sweden', flag: 'flag se' };
       case 2:
-        return 'Denmark';
+        return { name: 'Denmark', flag: 'flag dk' };
       case 3:
-        return 'Norway';
+        return { name: 'Norway', flag: 'flag no' };
       case 4:
-        return 'Finland';
+        return { name: 'Finland', flag: 'flag fi' };
       case 5:
-        return 'Germany';
+        return { name: 'Germany', flag: 'flag de' };
     }
   }
   getPublicHeaders() {
