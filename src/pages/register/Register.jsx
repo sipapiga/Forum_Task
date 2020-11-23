@@ -19,7 +19,7 @@ export default function Register(props) {
   function handleSubmit(e) {
     e.preventDefault();
     if (countries.length === 0) {
-      setAlert({ msg: 'Please select country!' }, 'danger');
+      setAlert('Please select country!', 'danger');
       return;
     }
     const country = countries.id;
@@ -30,26 +30,23 @@ export default function Register(props) {
       password,
       country,
     };
-
     try {
-      authKit
-        .register(email, password, lastName, firstName, country)
-        .then((res) => {
-          if (res.status !== 201) {
-            res.json().then((data) => {
-              setAlert(data, 'danger');
-            });
-            return;
-          }
-          props.history.push({
-            pathname: '/login',
-            state: { successMsg: 'User Created' },
+      authKit.register(payload).then((res) => {
+        if (res.status !== 201) {
+          res.json().then((data) => {
+            setAlert(data, 'danger');
           });
-          setFirstName('');
-          setLastName('');
-          setEmail('');
-          setPassword('');
+          return;
+        }
+        props.history.push({
+          pathname: '/login',
+          state: 'User Created',
         });
+        setFirstName('');
+        setLastName('');
+        setEmail('');
+        setPassword('');
+      });
     } catch (err) {
       console.log(err);
     }

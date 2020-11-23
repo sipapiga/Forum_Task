@@ -21,13 +21,25 @@ export default class {
     // eslint-disable-next-line default-case
     switch (categoryId) {
       case 1:
+      case 10:
+      case 4:
+      case 7:
+      case 13:
         return ['Category 1', '#f15d2f'];
       case 2:
+      case 11:
+      case 5:
+      case 8:
+      case 14:
         return ['Category 2', '#814ca5'];
       case 3:
+      case 12:
+      case 6:
+      case 9:
+      case 15:
         return ['Category 3', '#1e7db5'];
       default:
-        return null;
+        return ['None Category', '#d4368f'];
     }
   }
   getPostListByCategory(id) {

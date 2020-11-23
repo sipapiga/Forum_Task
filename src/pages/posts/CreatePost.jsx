@@ -39,7 +39,7 @@ function CreatePost(props) {
       category: parseInt(selectedCategory),
     };
     console.log(payload);
-    /*   try {
+    try {
       forumKit.createPost(payload).then((res) => {
         if (res.status !== 201) {
           return;
@@ -51,7 +51,7 @@ function CreatePost(props) {
       });
     } catch (err) {
       console.log(err);
-    } */
+    }
   }
 
   function fetchCategories() {

@@ -18,14 +18,8 @@ export default class {
     });
   }
 
-  register(email, password, firstName, lastName, country) {
-    const payload = {
-      firstName,
-      lastName,
-      email,
-      password,
-      country,
-    };
+  register(payload) {
+    console.log(payload);
     return fetch(REGISTER_URL, {
       method: 'POST',
       body: JSON.stringify(payload),
