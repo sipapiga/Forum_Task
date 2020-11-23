@@ -38,7 +38,6 @@ function CreatePost(props) {
       content,
       category: parseInt(selectedCategory),
     };
-    console.log(payload);
     try {
       forumKit.createPost(payload).then((res) => {
         if (res.status !== 201) {

@@ -19,7 +19,6 @@ export default class {
   }
 
   register(payload) {
-    console.log(payload);
     return fetch(REGISTER_URL, {
       method: 'POST',
       body: JSON.stringify(payload),

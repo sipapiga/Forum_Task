@@ -39,7 +39,7 @@ export default class {
       case 15:
         return ['Category 3', '#1e7db5'];
       default:
-        return ['None Category', '#d4368f'];
+        return null;
     }
   }
   getPostListByCategory(id) {
