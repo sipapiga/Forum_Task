@@ -7,7 +7,6 @@ import UserContext from '../../contexts/userContext';
 import Authkit from '../../data/AuthKit';
 import ForumKit from '../../data/ForumKit';
 import CustomButton from '../../components/custom-button/Custom-button';
-import Row from '../../components/row/Row';
 import { HomeContainer } from './home.style';
 import Segment from '../../components/segment/Segment';
 
@@ -44,6 +43,7 @@ export default function Home() {
       .map((post, index) => {
         return (
           <Segment
+            key={index}
             post={post}
             index={index}
             postType="popularPosts"
@@ -63,6 +63,7 @@ export default function Home() {
       .map((post, index) => {
         return (
           <Segment
+            key={index}
             post={post}
             index={index}
             postType="mostReplies"
@@ -79,16 +80,16 @@ export default function Home() {
     <div className="container-fluid">
       <div className="row" style={{ height: '90vh' }}>
         <HomeContainer className="col-md-4 col-sm-12 ">
-          <div class="ui centered card">
-            <div class="image">
+          <div className="ui centered card">
+            <div className="image">
               <img src={faker.image.people()} alt="" />
             </div>
-            <div class="content">
-              <div class="header">
+            <div className="content">
+              <div className="header">
                 {currentUser && currentUser.firstName}{' '}
                 {currentUser && currentUser.lastName}
               </div>
-              <div class="description">
+              <div className="description">
                 <div>{currentUser && currentUser.email}</div>
                 <div>
                   {currentUser &&

@@ -32,14 +32,14 @@ export default function Header() {
                 setCurrentUser(null);
               }}
             >
-              <i className="fa fa-sign-out-alt" />
+              <i className="sign-out icon" />
               Logout
             </OptionDiv>
             <OptionDiv>
               <OptionLink to="/posts/create/">
                 <CustomButton>
                   {' '}
-                  <i class="plus icon"></i>Write a Post
+                  <i className="plus icon"></i>Write a Post
                 </CustomButton>
               </OptionLink>
             </OptionDiv>
@@ -47,7 +47,7 @@ export default function Header() {
         ) : (
           <>
             <OptionLink to="/login">
-              <i className="fa fa-sign-in-alt"></i>
+              <i className="sign-in icon"></i>
               Login
             </OptionLink>
           </>

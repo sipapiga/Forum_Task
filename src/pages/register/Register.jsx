@@ -30,7 +30,6 @@ export default function Register(props) {
       password,
       country,
     };
-    console.log(payload);
 
     try {
       authKit

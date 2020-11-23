@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { BreadCrumbText } from './breadcrumb.style';
 
-export default function Breadcrumb({ onClick, children, key }) {
+export default function Breadcrumb({ onClick, children }) {
   const [active, setActive] = useState('');
 
   return (
-    <div className="container-fluid" key={key}>
+    <div className="container-fluid">
       <div className="ui breadcrumb">
         {children.map((child, index) => {
           return (

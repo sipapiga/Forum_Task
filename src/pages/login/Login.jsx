@@ -17,7 +17,6 @@ export default function Login(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(email, password);
 
     try {
       authKit.login(email, password).then((res) => {

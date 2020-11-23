@@ -9,7 +9,7 @@ export default function CommentList({ comments }) {
     comments &&
     comments.map((comment, index) => {
       return (
-        <div className="ui segment">
+        <div className="ui segment" key={index}>
           <div className="ui relaxed list">
             <div className="item">
               <p className="text-info">Comment {index + 1}</p>
@@ -30,7 +30,7 @@ export default function CommentList({ comments }) {
                 </p>
                 <div className="description">
                   <strong>{comment.title}</strong>
-                  <p>{comment.content && renderHTML(comment.content)}</p>
+                  <div>{comment.content && renderHTML(comment.content)}</div>
                 </div>
               </div>
             </div>

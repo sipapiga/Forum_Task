@@ -33,7 +33,7 @@ export default function CategoryList(props) {
                     <Link className="header" to={`/posts/${post.id}`}>
                       <h4 className="mb-3">
                         {' '}
-                        <i class="fas fa-star text-info"></i> {post.title}
+                        <i className="star icon text-info"></i> {post.title}
                       </h4>
                     </Link>
                     <div className="description">

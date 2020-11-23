@@ -7,7 +7,7 @@ export default function NotFoundPage() {
     <Container>
       <Text>
         <strong className="text-primary"> 4 </strong>
-        <i className="far fa-frown"></i>
+        <i className="frown icon"></i>
         <strong className="text-warning"> 4</strong>| Page not found
         <p className="display-4 text-white">
           <div className="text-secondary">

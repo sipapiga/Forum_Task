@@ -4,9 +4,9 @@ export default function Alert({ alert }) {
   return (
     alert !== null && (
       <div className={`alert alert-${alert.type}`} role="alert">
-        <i className="fa fa-info-circle" />
+        <i className="info icon" />
         {alert.msg &&
-          Object.entries(alert.msg).map((msg) => {
+          Object.entries(alert.msg).map((msg, index) => {
             return <>{msg[1]}</>;
           })}{' '}
         *

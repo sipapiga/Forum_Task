@@ -19,14 +19,16 @@ export default function Segment({ post, index, postType, colors }) {
               {postType && postType === 'mostReplies' ? (
                 <>
                   {' '}
-                  <i className="fas fa-comments"></i> <b> Comments </b>{' '}
+                  <i className="comments icon"></i> <b> Comments </b>{' '}
                   {post.countResponses}
                 </>
               ) : (
                 <>
                   {' '}
-                  <p class={`ui ${colors[index]} right ribbon label`}>Hot</p>
-                  <i className="fas fa-eye"></i> <b> Views </b> {post.viewCount}
+                  <p className={`ui ${colors[index]} right ribbon label`}>
+                    Hot
+                  </p>
+                  <i className="eye icon"></i> <b> Views </b> {post.viewCount}
                 </>
               )}
             </div>

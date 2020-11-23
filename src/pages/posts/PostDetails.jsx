@@ -33,7 +33,6 @@ export default function PostDetails(props) {
           return;
         }
         res.json().then((data) => {
-          console.log(data);
           setPostData(data);
           setLoading(true);
           setSubscribe(data.userSubscribed);
@@ -55,7 +54,7 @@ export default function PostDetails(props) {
         <div className="ui segment">
           <ContentDiv>
             <h2 className="display-5">
-              <i class="fas fa-star text-primary"></i> {postData.title}
+              <i className="star icon text-primary"></i> {postData.title}
             </h2>
           </ContentDiv>
           <ContentDiv className="text-right">
@@ -76,7 +75,7 @@ export default function PostDetails(props) {
             {postData.content && renderHTML(postData.content)}
           </ContentDiv>
           <ContentDiv>
-            <p class="font-weight-light">
+            <p className="font-weight-light">
               Last Updated :{' '}
               {moment(postData.updatedAt).format('YYYY-MM-DD HH:mm:ss')}
             </p>
@@ -86,17 +85,17 @@ export default function PostDetails(props) {
               <div className="mr-2">
                 {isPinned ? (
                   <div
-                    class="ui icon button"
+                    className="ui icon button"
                     onClick={() => setIsPinned(!isPinned)}
                   >
-                    <i class="thumbtack icon" style={{ color: 'red' }}></i>
+                    <i className="thumbtack icon" style={{ color: 'red' }}></i>
                   </div>
                 ) : (
                   <div
-                    class="ui icon button"
+                    className="ui icon button"
                     onClick={() => setIsPinned(!isPinned)}
                   >
-                    <i class="thumbtack icon"></i>
+                    <i className="thumbtack icon"></i>
                   </div>
                 )}
               </div>
@@ -124,18 +123,18 @@ export default function PostDetails(props) {
               {subscribe ? (
                 <>
                   <div
-                    class="ui icon button"
+                    className="ui icon button"
                     onClick={() => setSubscribe(!subscribe)}
                   >
-                    <i class="bell icon" style={{ color: 'red' }}></i>
+                    <i className="bell icon" style={{ color: 'red' }}></i>
                   </div>
                 </>
               ) : (
                 <div
-                  class="ui icon button"
+                  className="ui icon button"
                   onClick={() => setSubscribe(!subscribe)}
                 >
-                  <i class="bell slash icon"></i>
+                  <i className="bell slash icon"></i>
                 </div>
               )}
             </div>
@@ -147,7 +146,7 @@ export default function PostDetails(props) {
           <div>
             <p className="text-info ">
               <strong>
-                <i className="fa fa-comments"></i>{' '}
+                <i className="comments icon"></i>{' '}
                 {postData ? postData.countResponses : 0} Comments
               </strong>
             </p>
@@ -160,7 +159,7 @@ export default function PostDetails(props) {
           />
           <div className="mt-5">
             <p className="text-info ">
-              <i className="fas fa-comment-dots ml-1"></i>{' '}
+              <i className="comment alternate icon"></i>{' '}
               <strong>Join the discussion</strong>
             </p>
             <hr />
