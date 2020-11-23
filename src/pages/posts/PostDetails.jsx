@@ -15,7 +15,6 @@ import CreateComment from '../../components/comment/CreateComment';
 import moment from 'moment';
 import renderHTML from 'react-render-html';
 import RelatedPost from '../../components/relatedPost/RelatedPost';
-import CustomButton from '../../components/custom-button/Custom-button';
 
 export default function PostDetails(props) {
   const [postData, setPostData] = useState(null);

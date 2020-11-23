@@ -22,7 +22,8 @@ export default function Login(props) {
       authKit.login(email, password).then((res) => {
         if (res.status !== 200) {
           res.json().then((data) => {
-            setAlert(data, 'danger');
+            console.log(data);
+            setAlert(data.nonFieldErrors, 'danger');
           });
           return;
         }
@@ -86,12 +87,20 @@ export default function Login(props) {
           required
         />
         <div className="text-center">
-          <CustomButton type="submit" bgColor="#0e55a2">
+          <CustomButton
+            type="submit"
+            bgColor="#fb6d9d"
+            hover="#b52e5c"
+            width="100%"
+          >
             Login
           </CustomButton>
-          <TextLink to="/register">
-            <p className="mt-3">I do not have an account</p>
-          </TextLink>
+          <p className="mt-3">
+            Don't have an account?
+            <TextLink to="/register">
+              <b>Sign Up</b>{' '}
+            </TextLink>
+          </p>
         </div>
       </form>
     </SignInContainer>

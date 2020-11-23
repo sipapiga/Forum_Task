@@ -34,7 +34,10 @@ export default function Register(props) {
       authKit.register(payload).then((res) => {
         if (res.status !== 201) {
           res.json().then((data) => {
-            setAlert(data, 'danger');
+            console.log(data);
+            data.email
+              ? setAlert(data.email, 'danger')
+              : setAlert(data.password, 'danger');
           });
           return;
         }
@@ -124,12 +127,21 @@ export default function Register(props) {
           onSelecteChange={setCountries}
         />
         <div className="text-center">
-          <CustomButton type="submit" bgColor="#0e55a2" className="mt-5">
-            Register
+          <CustomButton
+            type="submit"
+            bgColor="#fb6d9d"
+            hover="#b52e5c"
+            width="100%"
+            className="mt-5"
+          >
+            register
           </CustomButton>
-          <TextLink to="/login">
-            <p className="mt-3">I already have an account</p>
-          </TextLink>
+          <p className="mt-3">
+            Already have account?
+            <TextLink to="/login">
+              <b>Sign In</b>{' '}
+            </TextLink>
+          </p>
         </div>
       </form>
     </SignInContainer>
