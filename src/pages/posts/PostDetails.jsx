@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { withRouter } from 'react-router';
 
 import ForumKit from '../../data/ForumKit';
 import AuthKit from '../../data/AuthKit';
@@ -9,21 +10,38 @@ import {
   PostDetailsDiv,
 } from './post.style';
 import PostContext from '../../contexts/postContext';
+import UserContext from '../../contexts/userContext';
 import CommentList from '../../components/comment/CommentList';
 import CreateComment from '../../components/comment/CreateComment';
+import RelatedPost from '../../components/relatedPost/RelatedPost';
+import CustomButton from '../../components/custom-button/Custom-button';
 
 import moment from 'moment';
 import renderHTML from 'react-render-html';
-import RelatedPost from '../../components/relatedPost/RelatedPost';
+import Modal from 'react-bootstrap/Modal';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-export default function PostDetails(props) {
+function PostDetails(props) {
   const [postData, setPostData] = useState(null);
+  const { currentUser } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const ID = props.computedMatch.params.id;
   const [subscribe, setSubscribe] = useState(null);
   const [isPinned, setIsPinned] = useState(null);
+  const [isOpen, setIsOpen] = useState(false); //set open to modal
   const forumKit = new ForumKit();
   const authKit = new AuthKit();
+
+  const handleClose = () => setIsOpen(false);
+  const handleShow = () => {
+    setIsOpen(false);
+    if (currentUser.id === postData.author.id) {
+      setIsOpen(true);
+      return;
+    }
+    toast.error('You are not allowed to delete this post.');
+  };
 
   function fetchPostData() {
     try {
@@ -42,6 +60,21 @@ export default function PostDetails(props) {
       console.log(err);
     }
   }
+  function handleDeletePost() {
+    try {
+      forumKit.deletePost(ID).then((res) => {
+        if (res.status !== 204) {
+          return;
+        }
+        props.history.push({
+          pathname: '/posts',
+          state: { successMsg: 'Post Deleted' },
+        });
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   useEffect(() => {
     fetchPostData();
@@ -51,11 +84,16 @@ export default function PostDetails(props) {
     <>
       <section key={postData.id} className="container mb-5">
         <div className="ui segment">
-          <ContentDiv>
+          <PostDetailsDiv>
             <h2 className="display-5">
-              <i className="star icon text-primary"></i> {postData.title}
+              {postData.category &&
+                forumKit.getCategoryText(postData.category.id)[2]}{' '}
+              {postData.title}
             </h2>
-          </ContentDiv>
+            <div className="text-danger">
+              <i className="trash alternate icon" onClick={handleShow}></i>
+            </div>
+          </PostDetailsDiv>
           <ContentDiv className="text-right">
             {postData.category ? (
               <PostDetailCategory
@@ -184,6 +222,7 @@ export default function PostDetails(props) {
     <>
       {loading ? (
         <div className="container-fluid" style={{ backgroundColor: 'white' }}>
+          <ToastContainer />
           {renderedPost}
         </div>
       ) : (
@@ -191,6 +230,21 @@ export default function PostDetails(props) {
           <p>Loading...</p>
         </div>
       )}
+      <Modal show={isOpen} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Post</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete?</Modal.Body>
+        <Modal.Footer>
+          <CustomButton bgColor="#6c757d" onClick={handleClose}>
+            No
+          </CustomButton>
+          <CustomButton bgColor="#007bff" onClick={handleDeletePost}>
+            Yes
+          </CustomButton>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
+export default withRouter(PostDetails);

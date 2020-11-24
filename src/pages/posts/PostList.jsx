@@ -1,5 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react';
+
 import moment from 'moment';
+import { ToastContainer, toast } from 'react-toastify';
 import ForumKit from '../../data/ForumKit';
 import PostListContext from '../../contexts/postListContext';
 import { PostLink, PostCategoryChips, PostChipLink } from './post.style';
@@ -161,6 +163,7 @@ export default function Posts() {
       </Breadcrumb>
       {loading ? (
         <>
+          <ToastContainer />
           <table className="ui unstackable selectable table">
             <thead>
               <tr>

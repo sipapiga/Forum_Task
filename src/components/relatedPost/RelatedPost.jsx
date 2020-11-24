@@ -31,7 +31,9 @@ export default function RelatedPost({ postData }) {
       {relatedPosts && relatedPosts.length !== 0 && (
         <div>
           <p className="text-info ">
-            <strong>Related Posts</strong>
+            <strong>
+              <i className="clone icon"></i>Related Posts
+            </strong>
           </p>
           <hr />
         </div>

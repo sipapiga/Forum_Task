@@ -71,6 +71,12 @@ export default class {
       headers: authKit.getPrivateHeaders(),
     });
   }
+  deletePost(id) {
+    return fetch(GET_POSTS_URL + id, {
+      method: 'DELETE',
+      headers: authKit.getPrivateHeaders(),
+    });
+  }
   getPost(id) {
     return fetch(GET_POSTS_URL + id, {
       headers: authKit.getPrivateHeaders(),
