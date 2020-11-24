@@ -14,12 +14,10 @@ import UserContext from '../../contexts/userContext';
 import CommentList from '../../components/comment/CommentList';
 import CreateComment from '../../components/comment/CreateComment';
 import RelatedPost from '../../components/relatedPost/RelatedPost';
-import CustomButton from '../../components/custom-button/Custom-button';
+import CustomModal from '../../components/modal/CustomModal';
 
 import moment from 'moment';
 import renderHTML from 'react-render-html';
-import Modal from 'react-bootstrap/Modal';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function PostDetails(props) {
@@ -30,17 +28,25 @@ function PostDetails(props) {
   const [subscribe, setSubscribe] = useState(null);
   const [isPinned, setIsPinned] = useState(null);
   const [isOpen, setIsOpen] = useState(false); //set open to modal
+  const [modalType, setModalType] = useState('delete');
   const forumKit = new ForumKit();
   const authKit = new AuthKit();
 
   const handleClose = () => setIsOpen(false);
   const handleShow = () => {
     setIsOpen(false);
-    if (currentUser.id === postData.author.id) {
-      setIsOpen(true);
-      return;
+    if (postData.author !== null) {
+      if (currentUser.id === postData.author.id) {
+        setIsOpen(true);
+        return;
+      } else {
+        setModalType('info');
+        setIsOpen(true);
+        return;
+      }
     }
-    toast.error('You are not allowed to delete this post.');
+
+    //  toast.error('You are not allowed to delete this post.');
   };
 
   function fetchPostData() {
@@ -222,28 +228,19 @@ function PostDetails(props) {
     <>
       {loading ? (
         <div className="container-fluid" style={{ backgroundColor: 'white' }}>
-          <ToastContainer />
           {renderedPost}
+          <CustomModal
+            isOpen={isOpen}
+            handleClose={handleClose}
+            handleDeletePost={handleDeletePost}
+            type={modalType}
+          />
         </div>
       ) : (
         <div className="ui loading segment" style={{ height: '80vh' }}>
           <p>Loading...</p>
         </div>
       )}
-      <Modal show={isOpen} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Delete Post</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Are you sure you want to delete?</Modal.Body>
-        <Modal.Footer>
-          <CustomButton bgColor="#6c757d" onClick={handleClose}>
-            No
-          </CustomButton>
-          <CustomButton bgColor="#007bff" onClick={handleDeletePost}>
-            Yes
-          </CustomButton>
-        </Modal.Footer>
-      </Modal>
     </>
   );
 }
