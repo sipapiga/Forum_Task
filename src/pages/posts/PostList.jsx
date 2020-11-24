@@ -12,6 +12,7 @@ export default function Posts() {
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(false);
   const [sort, setSort] = useState('createdAt');
+  const count = 100;
 
   const forumKit = new ForumKit();
   const items = [{ label: 'Recent' }, { label: 'Top Views' }];
@@ -85,7 +86,16 @@ export default function Posts() {
         <tbody key={post.id}>
           <tr>
             <td className="selectable" style={{ width: '60%' }}>
-              <PostLink to={`/posts/${post.id}`}>{post.title}</PostLink>
+              <PostLink to={`/posts/${post.id}`}>
+                {post.category && forumKit.getCategoryText(post.category)[2]}
+                {post.title}{' '}
+                <p className="font-weight-light" style={{ fontSize: '14px' }}>
+                  {' '}
+                  {post.content &&
+                    post.content.slice(0, count) +
+                      (post.content.length > count ? '...' : '')}
+                </p>
+              </PostLink>
             </td>
             <td className="left aligned selectable categoryColumn">
               {forumKit.getCategoryText(post.category) && (
@@ -103,12 +113,17 @@ export default function Posts() {
             </td>
             <td className="selectable">
               <PostChipLink to={`/posts/${post.id}`}>
-                <p className="text-secondary">
+                <p className="text-dark">
+                  <i className="comments icon"></i>{' '}
                   {post.countResponses ? post.countResponses : 0}
                 </p>
               </PostChipLink>
             </td>
-            <td>{post.viewCount}</td>
+            <td>
+              {' '}
+              <i className="eye icon"></i>
+              {post.viewCount}
+            </td>
             <td>{moment(post.createdAt).fromNow()}</td>
           </tr>
         </tbody>

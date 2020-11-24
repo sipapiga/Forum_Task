@@ -25,19 +25,31 @@ export default class {
       case 4:
       case 7:
       case 13:
-        return ['Category 1', '#f15d2f'];
+        return [
+          'Category 1',
+          '#f15d2f',
+          <i className="heart icon mr-2 text-muted"></i>,
+        ];
       case 2:
       case 11:
       case 5:
       case 8:
       case 14:
-        return ['Category 2', '#814ca5'];
+        return [
+          'Category 2',
+          '#814ca5',
+          <i className="coffee icon mr-2 text-muted"></i>,
+        ];
       case 3:
       case 12:
       case 6:
       case 9:
       case 15:
-        return ['Category 3', '#1e7db5'];
+        return [
+          'Category 3',
+          '#1e7db5',
+          <i className="cloud icon mr-2 text-muted"></i>,
+        ];
       default:
         return null;
     }

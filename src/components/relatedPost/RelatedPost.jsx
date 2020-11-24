@@ -10,6 +10,7 @@ import PostListContext from '../../contexts/postListContext';
 // Get Posts that have the same category as postDetail
 export default function RelatedPost({ postData }) {
   const { postListData } = useContext(PostListContext);
+  const count = 100;
   const authKit = new AuthKit();
 
   function isCategoryFound(post) {
@@ -47,6 +48,12 @@ export default function RelatedPost({ postData }) {
                   <Link target="_blank" to={`/posts/${post.id}`}>
                     <h3>{post.title}</h3>
                   </Link>
+                  <p className="font-weight-light">
+                    {' '}
+                    {post.content &&
+                      post.content.slice(0, count) +
+                        (post.content.length > count ? '...' : '')}
+                  </p>
                 </ContentDiv>
 
                 <PostDetailsDiv>
@@ -67,6 +74,10 @@ export default function RelatedPost({ postData }) {
                     )}{' '}
                     |<b className="lead"> Published </b>{' '}
                     {moment(post.createdAt).fromNow()}
+                  </div>
+                  <div>
+                    <i className="comments icon ui grey "></i>{' '}
+                    {post.countResponses}
                   </div>
                 </PostDetailsDiv>
               </div>

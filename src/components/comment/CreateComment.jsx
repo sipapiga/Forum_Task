@@ -10,13 +10,14 @@ import ForumKit from '../../data/ForumKit';
 import PostContext from '../../contexts/postContext';
 
 export default function CreateComment({ id }) {
-  const { postData, setPostData } = useContext(PostContext);
+  const { setPostData } = useContext(PostContext);
   const [content, setContent] = useState('');
   const [title, setTitle] = useState('');
   const forumKit = new ForumKit();
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (content === '') return toast.error('Please add some comment');
     const payload = {
       title,
       content,

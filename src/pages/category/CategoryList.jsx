@@ -37,13 +37,21 @@ export default function CategoryList(props) {
                       </h4>
                     </Link>
                     <div className="description">
-                      <b> Written by </b>
-                      {post.author ? (
-                        <>{post.author.firstName}</>
-                      ) : (
-                        <>Anonym</>
-                      )}{' '}
-                      |<b> Published </b> {moment(post.createdAt).fromNow()}
+                      <div className="row d-flex justify-content-between mr-1 ml-1">
+                        <div>
+                          <b> Written by </b>
+                          {post.author ? (
+                            <>{post.author.firstName}</>
+                          ) : (
+                            <>Anonym</>
+                          )}{' '}
+                          |<b> Published </b> {moment(post.createdAt).fromNow()}
+                        </div>
+                        <div>
+                          <i className="comments icon ui grey "></i>{' '}
+                          {post.countResponses}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -34,7 +34,6 @@ export default function Register(props) {
       authKit.register(payload).then((res) => {
         if (res.status !== 201) {
           res.json().then((data) => {
-            console.log(data);
             data.email
               ? setAlert(data.email, 'danger')
               : setAlert(data.password, 'danger');
